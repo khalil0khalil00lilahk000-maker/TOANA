@@ -1,12 +1,13 @@
 
 --==================================================
---              TOANA HUB 2.3
---     MOBILE + PC | KEYBINDS
+--              TOANA HUB 2.4
+--     MOBILE + PC | KEYBINDS | WELCOME POPUP
 --==================================================
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 
@@ -86,143 +87,123 @@ gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = guiParent
 
 --==================================================
--- TOANA HUB : WELCOME POPUP
+-- TOANA WELCOME POPUP
 --==================================================
-
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local UIS = game:GetService("UserInputService")
-
-local player = Players.LocalPlayer
 
 local SITE_URL = "https://toana.ct.ws"
 local DISCORD_URL = "https://discord.gg/hqcuy33zTf"
 
-local popupClosed = false
-
 local popup = Instance.new("Frame")
 popup.Name = "ToanaWelcomePopup"
-popup.Size = UDim2.fromOffset(360, 245)
-popup.Position = UDim2.new(0.5, -180, 0.5, -122)
-popup.BackgroundColor3 = Color3.fromRGB(18, 13, 30)
+popup.Size = UDim2.fromOffset(360,245)
+popup.Position = UDim2.new(0.5,-180,0.5,-122)
+popup.BackgroundColor3 = Color3.fromRGB(18,13,30)
 popup.BorderSizePixel = 0
 popup.ZIndex = 100
 popup.Parent = gui
 
 local popupCorner = Instance.new("UICorner")
-popupCorner.CornerRadius = UDim.new(0, 14)
+popupCorner.CornerRadius = UDim.new(0,16)
 popupCorner.Parent = popup
 
 local popupStroke = Instance.new("UIStroke")
-popupStroke.Color = Color3.fromRGB(151, 71, 255)
+popupStroke.Color = Config.Theme
 popupStroke.Thickness = 2
 popupStroke.Parent = popup
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -30, 0, 45)
-title.Position = UDim2.fromOffset(15, 12)
-title.BackgroundTransparency = 1
-title.Text = "WELCOME TO TOANA"
-title.TextColor3 = Color3.fromRGB(190, 130, 255)
-title.Font = Enum.Font.GothamBlack
-title.TextSize = 21
-title.ZIndex = 101
-title.Parent = popup
+local popupTitle = Instance.new("TextLabel")
+popupTitle.Size = UDim2.new(1,-50,0,42)
+popupTitle.Position = UDim2.fromOffset(15,12)
+popupTitle.BackgroundTransparency = 1
+popupTitle.Text = "WELCOME TO TOANA HUB"
+popupTitle.TextColor3 = Color3.new(1,1,1)
+popupTitle.TextSize = 19
+popupTitle.Font = Enum.Font.GothamBold
+popupTitle.TextXAlignment = Enum.TextXAlignment.Left
+popupTitle.ZIndex = 101
+popupTitle.Parent = popup
 
-local subtitle = Instance.new("TextLabel")
-subtitle.Size = UDim2.new(1, -30, 0, 35)
-subtitle.Position = UDim2.fromOffset(15, 55)
-subtitle.BackgroundTransparency = 1
-subtitle.Text = "Rejoins notre communauté !"
-subtitle.TextColor3 = Color3.fromRGB(200, 190, 215)
-subtitle.Font = Enum.Font.Gotham
-subtitle.TextSize = 13
-subtitle.ZIndex = 101
-subtitle.Parent = popup
+local popupClose = Instance.new("TextButton")
+popupClose.Size = UDim2.fromOffset(30,30)
+popupClose.Position = UDim2.new(1,-40,0,10)
+popupClose.BackgroundColor3 = Color3.fromRGB(180,50,70)
+popupClose.Text = "X"
+popupClose.TextColor3 = Color3.new(1,1,1)
+popupClose.Font = Enum.Font.GothamBold
+popupClose.TextSize = 15
+popupClose.ZIndex = 102
+popupClose.Parent = popup
 
-local function createPopupButton(name, text, color, y, callback)
+local popupCloseCorner = Instance.new("UICorner")
+popupCloseCorner.CornerRadius = UDim.new(0,8)
+popupCloseCorner.Parent = popupClose
+
+local popupSubtitle = Instance.new("TextLabel")
+popupSubtitle.Size = UDim2.new(1,-30,0,38)
+popupSubtitle.Position = UDim2.fromOffset(15,58)
+popupSubtitle.BackgroundTransparency = 1
+popupSubtitle.Text = "Retrouve TOANA sur notre site et Discord !"
+popupSubtitle.TextColor3 = Color3.fromRGB(190,185,205)
+popupSubtitle.TextSize = 12
+popupSubtitle.Font = Enum.Font.Gotham
+popupSubtitle.TextWrapped = true
+popupSubtitle.ZIndex = 101
+popupSubtitle.Parent = popup
+
+local function makePopupButton(name, y, color, url)
     local button = Instance.new("TextButton")
-    button.Name = name
-    button.Size = UDim2.new(1, -40, 0, 42)
-    button.Position = UDim2.fromOffset(20, y)
+    button.Size = UDim2.new(1,-40,0,43)
+    button.Position = UDim2.fromOffset(20,y)
     button.BackgroundColor3 = color
-    button.BorderSizePixel = 0
-    button.Text = text
-    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Text = name
+    button.TextColor3 = Color3.new(1,1,1)
+    button.TextSize = 14
     button.Font = Enum.Font.GothamBold
-    button.TextSize = 13
-    button.ZIndex = 102
+    button.ZIndex = 101
     button.Parent = popup
 
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 9)
-    corner.Parent = button
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0,9)
+    buttonCorner.Parent = button
 
-    button.MouseButton1Click:Connect(callback)
+    button.MouseButton1Click:Connect(function()
+        if typeof(setclipboard) == "function" then
+            local success = pcall(setclipboard,url)
+
+            if success then
+                popupSubtitle.Text = name.." : lien copie !"
+            else
+                popupSubtitle.Text = "Impossible de copier le lien."
+            end
+        else
+            popupSubtitle.Text = "Ton executor ne supporte pas la copie."
+        end
+    end)
 
     return button
 end
 
-local function openLink(url)
-    if typeof(setclipboard) == "function" then
-        pcall(setclipboard, url)
-    end
-
-    if typeof(request) == "function" then
-        pcall(function()
-            request({
-                Url = url,
-                Method = "GET"
-            })
-        end)
-    end
-end
-
-createPopupButton(
-    "WebsiteButton",
-    "🌐  COPIER LE LIEN DU SITE",
-    Color3.fromRGB(125, 55, 220),
-    105,
-    function()
-        openLink(SITE_URL)
-    end
+makePopupButton(
+    "COPIER LE LIEN DU SITE",
+    112,
+    Color3.fromRGB(105,65,190),
+    SITE_URL
 )
 
-createPopupButton(
-    "DiscordButton",
-    "💬  COPIER INVITATION DISCORD",
-    Color3.fromRGB(88, 101, 242),
-    155,
-    function()
-        openLink(DISCORD_URL)
-    end
+makePopupButton(
+    "COPIER LE LIEN DISCORD",
+    165,
+    Color3.fromRGB(65,95,190),
+    DISCORD_URL
 )
 
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.fromOffset(30, 30)
-closeButton.Position = UDim2.new(1, -38, 0, 8)
-closeButton.BackgroundColor3 = Color3.fromRGB(55, 40, 70)
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.new(1, 1, 1)
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 14
-closeButton.ZIndex = 103
-closeButton.Parent = popup
-
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 8)
-closeCorner.Parent = closeButton
-
-local function closePopup()
-    if popupClosed then return end
-    popupClosed = true
-
+popupClose.MouseButton1Click:Connect(function()
     local tween = TweenService:Create(
         popup,
-        TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+        TweenInfo.new(0.2,Enum.EasingStyle.Quad,Enum.EasingDirection.In),
         {
-            BackgroundTransparency = 1,
-            Size = UDim2.fromOffset(320, 210)
+            Size = UDim2.fromOffset(0,0),
+            BackgroundTransparency = 1
         }
     )
 
@@ -230,9 +211,11 @@ local function closePopup()
     tween.Completed:Connect(function()
         popup:Destroy()
     end)
-end
+end)
 
-closeButton.MouseButton1Click:Connect(closePopup)
+--==================================================
+-- UI HELPERS
+--==================================================
 
 local function corner(obj, radius)
     local c = Instance.new("UICorner")
@@ -321,56 +304,52 @@ main.Visible = false
 main.Parent = gui
 corner(main,15)
 
+local outline = Instance.new("UIStroke")
+outline.Color = Config.Theme
+outline.Thickness = 2
+outline.Parent = main
+
 --==================================================
--- WHITE DRAG HANDLE
+-- WHITE DRAG BAR
 --==================================================
 
-local dragBar = Instance.new("TextButton")
+local dragBar = Instance.new("Frame")
 dragBar.Name = "WhiteDragBar"
-dragBar.Size = UDim2.new(0, 9, 1, 0)
-dragBar.Position = UDim2.new(0, -15, 0, 0)
-dragBar.BackgroundColor3 = Color3.fromRGB(255,255,255)
+dragBar.Size = UDim2.new(0,9,1,0)
+dragBar.Position = UDim2.new(0,-15,0,0)
+dragBar.BackgroundColor3 = Color3.new(1,1,1)
 dragBar.BorderSizePixel = 0
-dragBar.Text = ""
-dragBar.AutoButtonColor = false
 dragBar.Active = true
-dragBar.ZIndex = 10
 dragBar.Parent = main
+corner(dragBar,5)
 
-corner(dragBar, 5)
-
-local dragBarStroke = Instance.new("UIStroke")
-dragBarStroke.Color = Config.Theme
-dragBarStroke.Thickness = 1
-dragBarStroke.Parent = dragBar
-
-local draggingMain = false
-local mainDragStart
-local mainStartPosition
+local barDragging = false
+local barDragStart
+local barStartPosition
 
 dragBar.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
 
-        draggingMain = true
-        mainDragStart = input.Position
-        mainStartPosition = main.Position
+        barDragging = true
+        barDragStart = input.Position
+        barStartPosition = main.Position
     end
 end)
 
 UIS.InputChanged:Connect(function(input)
-    if not draggingMain then return end
+    if not barDragging then return end
 
     if input.UserInputType == Enum.UserInputType.MouseMovement
         or input.UserInputType == Enum.UserInputType.Touch then
 
-        local delta = input.Position - mainDragStart
+        local delta = input.Position - barDragStart
 
         main.Position = UDim2.new(
-            mainStartPosition.X.Scale,
-            mainStartPosition.X.Offset + delta.X,
-            mainStartPosition.Y.Scale,
-            mainStartPosition.Y.Offset + delta.Y
+            barStartPosition.X.Scale,
+            barStartPosition.X.Offset + delta.X,
+            barStartPosition.Y.Scale,
+            barStartPosition.Y.Offset + delta.Y
         )
     end
 end)
@@ -378,20 +357,19 @@ end)
 UIS.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
-
-        draggingMain = false
+        barDragging = false
     end
 end)
-local outline = Instance.new("UIStroke")
-outline.Color = Config.Theme
-outline.Thickness = 2
-outline.Parent = main
+
+--==================================================
+-- TITLE
+--==================================================
 
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1,-55,0,45)
 title.Position = UDim2.fromOffset(12,0)
 title.BackgroundTransparency = 1
-title.Text = "TOANA HUB 2.3"
+title.Text = "TOANA HUB 2.4"
 title.TextColor3 = Color3.new(1,1,1)
 title.TextSize = 21
 title.Font = Enum.Font.GothamBold
@@ -701,7 +679,7 @@ local function savePosition()
     local root = getRoot()
     if root then
         savedPosition = root.CFrame
-        print("TOANA : Position enregistrée")
+        print("TOANA : Position enregistree")
     end
 end
 
@@ -735,6 +713,7 @@ makeButton(scroll,"CHANGER COULEUR",function()
 
     outline.Color = Config.Theme
     floating.BackgroundColor3 = Config.Theme
+    popupStroke.Color = Config.Theme
     refreshESP()
 
     for _,obj in ipairs(scroll:GetChildren()) do
@@ -756,7 +735,7 @@ UIS.InputBegan:Connect(function(input,processed)
 
             if input.KeyCode == Enum.KeyCode.Escape then
                 keyButtons[feature].Text =
-                    keybinds[feature] and keybinds[feature].Name or "DÉFINIR"
+                    keybinds[feature] and keybinds[feature].Name or "DEFINIR"
 
                 keyButtons[feature].BackgroundColor3 =
                     Color3.fromRGB(75,55,115)
@@ -923,6 +902,6 @@ player.CharacterAdded:Connect(function()
 end)
 
 print("================================")
-print("        TOANA HUB 2.3")
+print("        TOANA HUB 2.4")
 print("        LOADED SUCCESSFULLY")
 print("================================")
