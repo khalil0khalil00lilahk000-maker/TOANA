@@ -166,19 +166,29 @@ local function makePopupButton(name, y, color, url)
     buttonCorner.CornerRadius = UDim.new(0,9)
     buttonCorner.Parent = button
 
-    button.MouseButton1Click:Connect(function()
-        if typeof(setclipboard) == "function" then
-            local success = pcall(setclipboard,url)
+button.MouseButton1Click:Connect(function()
+    -- Copier le lien
+    local copied = false
 
-            if success then
-                popupSubtitle.Text = name.." : lien copie !"
-            else
-                popupSubtitle.Text = "Impossible de copier le lien."
-            end
-        else
-            popupSubtitle.Text = "Ton executor ne supporte pas la copie."
-        end
+    if typeof(setclipboard) == "function" then
+        copied = pcall(setclipboard, url)
+    end
+
+    -- Essayer d'ouvrir le navigateur
+    local opened = pcall(function()
+        game:GetService("GuiService"):OpenBrowserWindow(url)
     end)
+
+    if copied and opened then
+        popupSubtitle.Text = name.." : ouvert + copie !"
+    elseif copied then
+        popupSubtitle.Text = name.." : lien copie !"
+    elseif opened then
+        popupSubtitle.Text = name.." : ouverture du lien !"
+    else
+        popupSubtitle.Text = "Ouverture et copie indisponibles."
+    end
+end)
 
     return button
 end
