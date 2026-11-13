@@ -178,8 +178,8 @@ corner(main,15)
 
 local dragBar = Instance.new("TextButton")
 dragBar.Name = "WhiteDragBar"
-dragBar.Size = UDim2.fromOffset(9, 75)
-dragBar.Position = UDim2.new(0, -15, 0, 75)
+dragBar.Size = UDim2.new(0, 9, 1, 0)
+dragBar.Position = UDim2.new(0, -15, 0, 0)
 dragBar.BackgroundColor3 = Color3.fromRGB(255,255,255)
 dragBar.BorderSizePixel = 0
 dragBar.Text = ""
