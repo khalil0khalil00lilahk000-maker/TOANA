@@ -172,6 +172,67 @@ main.Visible = false
 main.Parent = gui
 corner(main,15)
 
+--==================================================
+-- WHITE DRAG HANDLE
+--==================================================
+
+local dragBar = Instance.new("TextButton")
+dragBar.Name = "WhiteDragBar"
+dragBar.Size = UDim2.fromOffset(9, 75)
+dragBar.Position = UDim2.new(0, -15, 0, 75)
+dragBar.BackgroundColor3 = Color3.fromRGB(255,255,255)
+dragBar.BorderSizePixel = 0
+dragBar.Text = ""
+dragBar.AutoButtonColor = false
+dragBar.Active = true
+dragBar.ZIndex = 10
+dragBar.Parent = main
+
+corner(dragBar, 5)
+
+local dragBarStroke = Instance.new("UIStroke")
+dragBarStroke.Color = Config.Theme
+dragBarStroke.Thickness = 1
+dragBarStroke.Parent = dragBar
+
+local draggingMain = false
+local mainDragStart
+local mainStartPosition
+
+dragBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+        draggingMain = true
+        mainDragStart = input.Position
+        mainStartPosition = main.Position
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if not draggingMain then return end
+
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+        local delta = input.Position - mainDragStart
+
+        main.Position = UDim2.new(
+            mainStartPosition.X.Scale,
+            mainStartPosition.X.Offset + delta.X,
+            mainStartPosition.Y.Scale,
+            mainStartPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UIS.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+        draggingMain = false
+    end
+end)
 local outline = Instance.new("UIStroke")
 outline.Color = Config.Theme
 outline.Thickness = 2
