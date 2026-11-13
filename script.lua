@@ -85,6 +85,155 @@ gui.DisplayOrder = 999
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = guiParent
 
+--==================================================
+-- TOANA HUB : WELCOME POPUP
+--==================================================
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+
+local SITE_URL = "https://toana.ct.ws"
+local DISCORD_URL = "https://discord.gg/hqcuy33zTf"
+
+local popupClosed = false
+
+local popup = Instance.new("Frame")
+popup.Name = "ToanaWelcomePopup"
+popup.Size = UDim2.fromOffset(360, 245)
+popup.Position = UDim2.new(0.5, -180, 0.5, -122)
+popup.BackgroundColor3 = Color3.fromRGB(18, 13, 30)
+popup.BorderSizePixel = 0
+popup.ZIndex = 100
+popup.Parent = gui
+
+local popupCorner = Instance.new("UICorner")
+popupCorner.CornerRadius = UDim.new(0, 14)
+popupCorner.Parent = popup
+
+local popupStroke = Instance.new("UIStroke")
+popupStroke.Color = Color3.fromRGB(151, 71, 255)
+popupStroke.Thickness = 2
+popupStroke.Parent = popup
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -30, 0, 45)
+title.Position = UDim2.fromOffset(15, 12)
+title.BackgroundTransparency = 1
+title.Text = "WELCOME TO TOANA"
+title.TextColor3 = Color3.fromRGB(190, 130, 255)
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 21
+title.ZIndex = 101
+title.Parent = popup
+
+local subtitle = Instance.new("TextLabel")
+subtitle.Size = UDim2.new(1, -30, 0, 35)
+subtitle.Position = UDim2.fromOffset(15, 55)
+subtitle.BackgroundTransparency = 1
+subtitle.Text = "Rejoins notre communauté !"
+subtitle.TextColor3 = Color3.fromRGB(200, 190, 215)
+subtitle.Font = Enum.Font.Gotham
+subtitle.TextSize = 13
+subtitle.ZIndex = 101
+subtitle.Parent = popup
+
+local function createPopupButton(name, text, color, y, callback)
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Size = UDim2.new(1, -40, 0, 42)
+    button.Position = UDim2.fromOffset(20, y)
+    button.BackgroundColor3 = color
+    button.BorderSizePixel = 0
+    button.Text = text
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 13
+    button.ZIndex = 102
+    button.Parent = popup
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 9)
+    corner.Parent = button
+
+    button.MouseButton1Click:Connect(callback)
+
+    return button
+end
+
+local function openLink(url)
+    if typeof(setclipboard) == "function" then
+        pcall(setclipboard, url)
+    end
+
+    if typeof(request) == "function" then
+        pcall(function()
+            request({
+                Url = url,
+                Method = "GET"
+            })
+        end)
+    end
+end
+
+createPopupButton(
+    "WebsiteButton",
+    "🌐  COPIER LE LIEN DU SITE",
+    Color3.fromRGB(125, 55, 220),
+    105,
+    function()
+        openLink(SITE_URL)
+    end
+)
+
+createPopupButton(
+    "DiscordButton",
+    "💬  COPIER INVITATION DISCORD",
+    Color3.fromRGB(88, 101, 242),
+    155,
+    function()
+        openLink(DISCORD_URL)
+    end
+)
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.fromOffset(30, 30)
+closeButton.Position = UDim2.new(1, -38, 0, 8)
+closeButton.BackgroundColor3 = Color3.fromRGB(55, 40, 70)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 14
+closeButton.ZIndex = 103
+closeButton.Parent = popup
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 8)
+closeCorner.Parent = closeButton
+
+local function closePopup()
+    if popupClosed then return end
+    popupClosed = true
+
+    local tween = TweenService:Create(
+        popup,
+        TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+        {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromOffset(320, 210)
+        }
+    )
+
+    tween:Play()
+    tween.Completed:Connect(function()
+        popup:Destroy()
+    end)
+end
+
+closeButton.MouseButton1Click:Connect(closePopup)
+
 local function corner(obj, radius)
     local c = Instance.new("UICorner")
     c.CornerRadius = UDim.new(0,radius or 9)
