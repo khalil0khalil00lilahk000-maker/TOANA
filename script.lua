@@ -916,7 +916,13 @@ player.CharacterAdded:Connect(function()
     table.clear(collisionCache)
     refreshESP()
 end)
-
+if invincibleEnabled then
+    local hum = getHumanoid()
+    if hum then
+        hum.MaxHealth = math.huge
+        hum.Health = hum.MaxHealth
+    end
+end
 print("================================")
 print("        TOANA HUB 2.5")
 print("        LOADED SUCCESSFULLY")
