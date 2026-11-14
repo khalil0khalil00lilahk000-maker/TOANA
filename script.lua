@@ -216,69 +216,6 @@ popupDragBar.InputBegan:Connect(function(input)
     end
 end)
 
-UIS.InputChanged:Connect(function(input)
-    if not popupDragging then return end
-
-    if input.UserInputType == Enum.UserInputType.MouseMovement
-        or input.UserInputType == Enum.UserInputType.Touch then
-
-        local delta = input.Position - popupDragStart
-
-        popup.Position = UDim2.new(
-            popupStartPosition.X.Scale,
-            popupStartPosition.X.Offset + delta.X,
-            popupStartPosition.Y.Scale,
-            popupStartPosition.Y.Offset + delta.Y
-        )
-    end
-end)
-
-UIS.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
-        popupDragging = false
-    end
-end)
-
-
-
-
-
-
-UIS.InputChanged:Connect(function(input)
-    if popupDragging and (
-        input.UserInputType == Enum.UserInputType.MouseMovement
-        or input.UserInputType == Enum.UserInputType.Touch
-    ) then
-        local delta = input.Position - popupDragStart
-
-        popup.Position = UDim2.new(
-            popupStartPosition.X.Scale,
-            popupStartPosition.X.Offset + delta.X,
-            popupStartPosition.Y.Scale,
-            popupStartPosition.Y.Offset + delta.Y
-        )
-    end
-end)
-
-UIS.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-    or input.UserInputType == Enum.UserInputType.Touch then
-        popupDragging = false
-    end
-end)
-
-
-local popupClose = Instance.new("TextButton")
-popupClose.Size = UDim2.fromOffset(30,30)
-popupClose.Position = UDim2.new(1,-40,0,10)
-popupClose.BackgroundColor3 = Color3.fromRGB(180,50,70)
-popupClose.Text = "X"
-popupClose.TextColor3 = Color3.new(1,1,1)
-popupClose.Font = Enum.Font.GothamBold
-popupClose.TextSize = 15
-popupClose.ZIndex = 102
-popupClose.Parent = popup
 
 
     return button
