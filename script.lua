@@ -93,44 +93,58 @@ gui.Parent = guiParent
 local SITE_URL = "https://toana.ct.ws"
 local DISCORD_URL = "https://discord.gg/hqcuy33zTf"
 
-local popup = Instance.new("Frame")
-popup.Name = "ToanaWelcomePopup"
-popup.Size = UDim2.fromOffset(360,245)
-popup.Position = UDim2.new(0.5,-180,0.5,-122)
-popup.BackgroundColor3 = Color3.fromRGB(18,13,30)
-popup.BorderSizePixel = 0
-popup.ZIndex = 100
-popup.Parent = gui
--- BARRE BLANCHE DU POPUP
-local popupDragBar = Instance.new("Frame")
-popupDragBar.Name = "PopupWhiteBar"
+
+-- BARRE BLANCHE DEPLACABLE DU POPUP
+local popupDragBar = Instance.new("TextButton")
+popupDragBar.Name = "PopupDragBar"
 popupDragBar.Size = UDim2.new(0,9,1,0)
 popupDragBar.Position = UDim2.new(0,-15,0,0)
 popupDragBar.BackgroundColor3 = Color3.new(1,1,1)
+popupDragBar.Text = ""
 popupDragBar.BorderSizePixel = 0
+popupDragBar.AutoButtonColor = false
+popupDragBar.Active = true
 popupDragBar.ZIndex = 103
 popupDragBar.Parent = popup
+
 corner(popupDragBar,5)
-local popupCorner = Instance.new("UICorner")
-popupCorner.CornerRadius = UDim.new(0,16)
-popupCorner.Parent = popup
 
-local popupStroke = Instance.new("UIStroke")
-popupStroke.Color = Config.Theme
-popupStroke.Thickness = 2
-popupStroke.Parent = popup
+local popupDragging = false
+local popupDragStart
+local popupStartPosition
 
-local popupTitle = Instance.new("TextLabel")
-popupTitle.Size = UDim2.new(1,-50,0,42)
-popupTitle.Position = UDim2.fromOffset(15,12)
-popupTitle.BackgroundTransparency = 1
-popupTitle.Text = "WELCOME TO TOANA HUB"
-popupTitle.TextColor3 = Color3.new(1,1,1)
-popupTitle.TextSize = 19
-popupTitle.Font = Enum.Font.GothamBold
-popupTitle.TextXAlignment = Enum.TextXAlignment.Left
-popupTitle.ZIndex = 101
-popupTitle.Parent = popup
+popupDragBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        popupDragging = true
+        popupDragStart = input.Position
+        popupStartPosition = popup.Position
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if popupDragging and (
+        input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch
+    ) then
+        local delta = input.Position - popupDragStart
+
+        popup.Position = UDim2.new(
+            popupStartPosition.X.Scale,
+            popupStartPosition.X.Offset + delta.X,
+            popupStartPosition.Y.Scale,
+            popupStartPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UIS.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        popupDragging = false
+    end
+end)
+
 
 local popupClose = Instance.new("TextButton")
 popupClose.Size = UDim2.fromOffset(30,30)
