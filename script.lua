@@ -94,33 +94,9 @@ local SITE_URL = "https://toana.ct.ws"
 local DISCORD_URL = "https://discord.gg/hqcuy33zTf"
 
 
--- BARRE BLANCHE DEPLACABLE DU POPUP
-local popupDragBar = Instance.new("TextButton")
-popupDragBar.Name = "PopupDragBar"
-popupDragBar.Size = UDim2.new(0,9,1,0)
-popupDragBar.Position = UDim2.new(0,-15,0,0)
-popupDragBar.BackgroundColor3 = Color3.new(1,1,1)
-popupDragBar.Text = ""
-popupDragBar.BorderSizePixel = 0
-popupDragBar.AutoButtonColor = false
-popupDragBar.Active = true
-popupDragBar.ZIndex = 103
-popupDragBar.Parent = popup
 
-corner(popupDragBar,5)
 
-local popupDragging = false
-local popupDragStart
-local popupStartPosition
 
-popupDragBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-    or input.UserInputType == Enum.UserInputType.Touch then
-        popupDragging = true
-        popupDragStart = input.Position
-        popupStartPosition = popup.Position
-    end
-end)
 
 UIS.InputChanged:Connect(function(input)
     if popupDragging and (
