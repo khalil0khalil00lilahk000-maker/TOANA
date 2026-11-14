@@ -281,15 +281,17 @@ end
 -- FLOATING BUTTON
 --==================================================
 
-local floating = Instance.new("TextButton")
+--==================================================
+-- FLOATING TOANA GITHUB ICON
+--==================================================
+
+local floating = Instance.new("ImageButton")
 floating.Name = "TOANA_FLOAT"
 floating.Size = UDim2.fromOffset(58,58)
 floating.Position = UDim2.new(0,18,0.45,0)
 floating.BackgroundColor3 = Config.Theme
-floating.Text = "T"
-floating.TextColor3 = Color3.new(1,1,1)
-floating.TextSize = 25
-floating.Font = Enum.Font.GothamBold
+floating.Image = "https://raw.githubusercontent.com/khalil0khalil00lilahk000-maker/TOANA/main/favicon.png"
+floating.ScaleType = Enum.ScaleType.Fit
 floating.Active = true
 floating.Parent = gui
 corner(floating,30)
@@ -298,7 +300,6 @@ local floatingStroke = Instance.new("UIStroke")
 floatingStroke.Color = Color3.new(1,1,1)
 floatingStroke.Thickness = 1.5
 floatingStroke.Parent = floating
-
 --==================================================
 -- MAIN MENU
 --==================================================
