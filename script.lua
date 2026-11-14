@@ -289,23 +289,13 @@ local floating = Instance.new("ImageButton")
 floating.Name = "TOANA_FLOAT"
 floating.Size = UDim2.fromOffset(58,58)
 floating.Position = UDim2.new(0,18,0.45,0)
-floating.BackgroundColor3 = Config.Theme
 floating.BackgroundTransparency = 1
-floating.Image = "https://create.roblox.com/store/asset/74403880033096/favicon"
+floating.Image = "rbxassetid://74403880033096"
 floating.ImageTransparency = 0
-floating.BackgroundTransparency = 0
-floating.BackgroundColor3 = Config.Theme
-floating.ImageColor3 = Color3.new(1,1,1)
 floating.ScaleType = Enum.ScaleType.Fit
 floating.Active = true
 floating.Parent = gui
-
 corner(floating,30)
-
-local floatingStroke = Instance.new("UIStroke")
-floatingStroke.Color = Color3.new(1,1,1)
-floatingStroke.Thickness = 1.5
-floatingStroke.Parent = floating
 --==================================================
 -- MAIN MENU
 --==================================================
