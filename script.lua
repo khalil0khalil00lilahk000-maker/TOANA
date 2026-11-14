@@ -280,61 +280,6 @@ popupClose.TextSize = 15
 popupClose.ZIndex = 102
 popupClose.Parent = popup
 
-local popupCloseCorner = Instance.new("UICorner")
-popupCloseCorner.CornerRadius = UDim.new(0,8)
-popupCloseCorner.Parent = popupClose
-
-local popupSubtitle = Instance.new("TextLabel")
-popupSubtitle.Size = UDim2.new(1,-30,0,38)
-popupSubtitle.Position = UDim2.fromOffset(15,58)
-popupSubtitle.BackgroundTransparency = 1
-popupSubtitle.Text = "Retrouve TOANA sur notre site et Discord !"
-popupSubtitle.TextColor3 = Color3.fromRGB(190,185,205)
-popupSubtitle.TextSize = 12
-popupSubtitle.Font = Enum.Font.Gotham
-popupSubtitle.TextWrapped = true
-popupSubtitle.ZIndex = 101
-popupSubtitle.Parent = popup
-
-local function makePopupButton(name, y, color, url)
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1,-40,0,43)
-    button.Position = UDim2.fromOffset(20,y)
-    button.BackgroundColor3 = color
-    button.Text = name
-    button.TextColor3 = Color3.new(1,1,1)
-    button.TextSize = 14
-    button.Font = Enum.Font.GothamBold
-    button.ZIndex = 101
-    button.Parent = popup
-
-    local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0,9)
-    buttonCorner.Parent = button
-
-button.MouseButton1Click:Connect(function()
-    -- Copier le lien
-    local copied = false
-
-    if typeof(setclipboard) == "function" then
-        copied = pcall(setclipboard, url)
-    end
-
-    -- Essayer d'ouvrir le navigateur
-    local opened = pcall(function()
-        game:GetService("GuiService"):OpenBrowserWindow(url)
-    end)
-
-    if copied and opened then
-        popupSubtitle.Text = name.." : ouvert + copie !"
-    elseif copied then
-        popupSubtitle.Text = name.." : lien copie !"
-    elseif opened then
-        popupSubtitle.Text = name.." : ouverture du lien !"
-    else
-        popupSubtitle.Text = "Ouverture et copie indisponibles."
-    end
-end)
 
     return button
 end
