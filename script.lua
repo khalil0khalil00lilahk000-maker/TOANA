@@ -86,6 +86,11 @@ gui.DisplayOrder = 999
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = guiParent
 
+local function corner(obj, radius)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0,radius or 9)
+    c.Parent = obj
+end
 
 --==================================================
 -- TOANA WELCOME POPUP
@@ -215,51 +220,34 @@ popupDragBar.InputBegan:Connect(function(input)
         popupStartPosition = popup.Position
     end
 end)
+UIS.InputChanged:Connect(function(input)
+    if not popupDragging then return end
 
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch then
 
+        local delta = input.Position - popupDragStart
 
-    return button
-end
+        popup.Position = UDim2.new(
+            popupStartPosition.X.Scale,
+            popupStartPosition.X.Offset + delta.X,
+            popupStartPosition.Y.Scale,
+            popupStartPosition.Y.Offset + delta.Y
+        )
+    end
+end)
 
-makePopupButton(
-    "COPIER LE LIEN DU SITE",
-    112,
-    Color3.fromRGB(105,65,190),
-    SITE_URL
-)
-
-makePopupButton(
-    "COPIER LE LIEN DISCORD",
-    165,
-    Color3.fromRGB(65,95,190),
-    DISCORD_URL
-)
-
-popupClose.MouseButton1Click:Connect(function()
-    local tween = TweenService:Create(
-        popup,
-        TweenInfo.new(0.2,Enum.EasingStyle.Quad,Enum.EasingDirection.In),
-        {
-            Size = UDim2.fromOffset(0,0),
-            BackgroundTransparency = 1
-        }
-    )
-
-    tween:Play()
-    tween.Completed:Connect(function()
-        popup:Destroy()
-    end)
+UIS.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+        popupDragging = false
+    end
 end)
 
 --==================================================
 -- UI HELPERS
 --==================================================
 
-local function corner(obj, radius)
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0,radius or 9)
-    c.Parent = obj
-end
 
 local function makeButton(parent, name, callback, height)
     local b = Instance.new("TextButton")
