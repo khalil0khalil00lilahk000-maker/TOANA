@@ -282,7 +282,7 @@ end
 --==================================================
 
 --==================================================
--- FLOATING TOANA GITHUB ICON
+-- FLOATING TOANA ICON
 --==================================================
 
 local floating = Instance.new("ImageButton")
@@ -290,10 +290,13 @@ floating.Name = "TOANA_FLOAT"
 floating.Size = UDim2.fromOffset(58,58)
 floating.Position = UDim2.new(0,18,0.45,0)
 floating.BackgroundColor3 = Config.Theme
-floating.Image = "https://raw.githubusercontent.com/khalil0khalil00lilahk000-maker/TOANA/main/favicon.png"
+floating.BackgroundTransparency = 1
+floating.Image = "rbxassetid://77044103774607"
+floating.ImageColor3 = Color3.new(1,1,1)
 floating.ScaleType = Enum.ScaleType.Fit
 floating.Active = true
 floating.Parent = gui
+
 corner(floating,30)
 
 local floatingStroke = Instance.new("UIStroke")
