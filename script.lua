@@ -178,7 +178,7 @@ local function makePopupButton(name,y,color,url)
     corner(button,9)
 
     button.MouseButton1Click:Connect(function()
-        popupSubtitle.Text = "Lien : "..url
+        popupSubtitle.Text = "Copier"
 
         if typeof(setclipboard) == "function" then
             pcall(setclipboard,url)
