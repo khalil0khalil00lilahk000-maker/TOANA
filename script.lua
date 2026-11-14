@@ -101,7 +101,16 @@ popup.BackgroundColor3 = Color3.fromRGB(18,13,30)
 popup.BorderSizePixel = 0
 popup.ZIndex = 100
 popup.Parent = gui
-
+-- BARRE BLANCHE DU POPUP
+local popupDragBar = Instance.new("Frame")
+popupDragBar.Name = "PopupWhiteBar"
+popupDragBar.Size = UDim2.new(0,9,1,0)
+popupDragBar.Position = UDim2.new(0,-15,0,0)
+popupDragBar.BackgroundColor3 = Color3.new(1,1,1)
+popupDragBar.BorderSizePixel = 0
+popupDragBar.ZIndex = 103
+popupDragBar.Parent = popup
+corner(popupDragBar,5)
 local popupCorner = Instance.new("UICorner")
 popupCorner.CornerRadius = UDim.new(0,16)
 popupCorner.Parent = popup
