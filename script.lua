@@ -1,6 +1,6 @@
 
 --==================================================
---              TOANA HUB 2.4
+--              TOANA HUB 2.5
 --     MOBILE + PC | KEYBINDS | WELCOME POPUP
 --==================================================
 
@@ -379,7 +379,7 @@ local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1,-55,0,45)
 title.Position = UDim2.fromOffset(12,0)
 title.BackgroundTransparency = 1
-title.Text = "TOANA HUB 2.4"
+title.Text = "TOANA HUB 2.5"
 title.TextColor3 = Color3.new(1,1,1)
 title.TextSize = 21
 title.Font = Enum.Font.GothamBold
@@ -621,6 +621,38 @@ noclipButton = makeActionRow(scroll,"Noclip","NOCLIP : OFF",toggleNoclip)
 --==================================================
 -- ESP
 --==================================================
+--==================================================
+-- INVINCIBLE
+--==================================================
+
+local invincibleEnabled = false
+local invincibleButton
+
+local function toggleInvincible()
+    invincibleEnabled = not invincibleEnabled
+
+    local hum = getHumanoid()
+
+    if hum then
+        if invincibleEnabled then
+            hum.MaxHealth = math.huge
+            hum.Health = hum.MaxHealth
+        else
+            hum.MaxHealth = 100
+            hum.Health = math.min(hum.Health, 100)
+        end
+    end
+
+    invincibleButton.Text =
+        "INVINCIBLE : " .. (invincibleEnabled and "ON" or "OFF")
+end
+
+invincibleButton = makeActionRow(
+    scroll,
+    "Invincible",
+    "INVINCIBLE : OFF",
+    toggleInvincible
+)
 local espButton
 
 local function toggleESP()
@@ -886,6 +918,6 @@ player.CharacterAdded:Connect(function()
 end)
 
 print("================================")
-print("        TOANA HUB 2.4")
+print("        TOANA HUB 2.5")
 print("        LOADED SUCCESSFULLY")
 print("================================")
